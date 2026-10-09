@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171b2a">
+<title>Questweaver — Your Personal Campaign</title>
+<style>
+:root{--bg:#111522;--panel:#1c2233;--panel2:#252d41;--line:#3b4359;--ink:#f5ecd8;--muted:#b5bbcc;--gold:#e0bd69;--green:#9fd0a7;--red:#e7a19b;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#242b41 0,#111522 55%);color:var(--ink);font:16px/1.45 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:10px 13px;background:#303951;color:var(--ink);font-weight:650}button:hover{filter:brightness(1.13)}button:disabled{opacity:.45;cursor:not-allowed}
+.app{max-width:1020px;margin:auto;padding:22px 16px 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:12px}.sigil{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--gold);color:#202333;font-size:25px}.brand h1{font-size:clamp(20px,4vw,27px);letter-spacing:.09em;margin:0}.brand p{color:var(--muted);font-size:12px;letter-spacing:.12em;margin:2px 0 0}.save{font-size:12px;color:var(--green);white-space:nowrap}
+.hero{background:linear-gradient(120deg,#282f45,#202637);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:0 16px 45px #0002}.hero-row{display:flex;align-items:center;gap:14px}.avatar{width:58px;height:58px;display:grid;place-items:center;border-radius:50%;background:#3b4359;font-size:29px;border:1px solid #6b7185}.grow{flex:1;min-width:0}.hero h2{margin:0;font-size:21px}.sub{color:var(--muted);font-size:13px}.goldbox{text-align:right;color:var(--gold);font-weight:800;font-size:23px}.goldbox small{display:block;font-size:11px;color:var(--muted);font-weight:600}.xphead{display:flex;justify-content:space-between;gap:10px;margin:18px 0 7px;font-size:13px}.bar{height:9px;border-radius:20px;background:#101523;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,#b38a3f,#f0d487);width:0;transition:width .25s}
+.tabs{display:flex;gap:7px;overflow:auto;margin:16px 0}.tab{flex:1;min-width:max-content;background:#1b2130;color:var(--muted)}.tab.active{background:#41435a;border-color:#b79b58;color:var(--ink)}
+.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:16px}.panel{background:#1b2130;border:1px solid var(--line);border-radius:var(--radius);padding:18px;min-width:0}.panel h3{margin:0 0 5px;font-size:18px}.panelhead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:15px}.eyebrow{color:var(--gold);text-transform:uppercase;font-size:11px;letter-spacing:.13em;font-weight:800}.muted{color:var(--muted);font-size:13px}.quest{border:1px solid var(--line);background:#232a3c;border-radius:14px;padding:13px;margin:10px 0}.quest.done{opacity:.65}.qrow{display:flex;gap:10px;align-items:flex-start}.qicon{font-size:20px}.qtitle{font-weight:750;overflow-wrap:anywhere}.qmeta{color:var(--muted);font-size:12px;margin-top:3px}.rewards{color:var(--gold);font-size:12px;font-weight:700;margin-top:10px}.qactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.qactions button{font-size:12px;padding:7px 9px}.primary{background:var(--gold);color:#252333;border-color:var(--gold)}.ghost{background:transparent}.smallgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:5px;margin:10px 0}.field label{font-size:12px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea{width:100%;background:#111725;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px;outline:none}.field input:focus,.field select:focus{border-color:var(--gold)}.field textarea{resize:vertical}.full{width:100%}.statrow{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #30374a}.statrow:last-child{border-bottom:0}.statrow strong{color:var(--gold)}.empty{padding:22px 12px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:13px}.hidden{display:none!important}.shopitem{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #30374a}.shopitem:last-child{border:0}.shopitem h4{margin:0 0 3px}.shopitem p{margin:0;color:var(--muted);font-size:12px}.price{color:var(--gold);font-weight:800;white-space:nowrap}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#f1dfb5;color:#1b2130;padding:11px 16px;border-radius:12px;font-weight:750;box-shadow:0 8px 30px #0005;z-index:5;max-width:90%;text-align:center}.footer{text-align:center;color:#80899e;font-size:11px;margin-top:18px}
+.chargrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}.charcard{background:#151b2a;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:left;min-width:0}.charcard.selected{border-color:var(--gold);box-shadow:0 0 0 1px #e0bd6944,inset 0 0 20px #e0bd6910}.charart{height:82px;border-radius:10px;background:radial-gradient(circle at 50% 20%,#485271,#252d41 72%);display:grid;place-items:center;font-size:44px;margin-bottom:9px;position:relative}.charcard strong{display:block;font-size:14px}.charcard small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.accessorygrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.accessory{border:1px solid var(--line);background:#151b2a;border-radius:12px;padding:11px;text-align:left;min-width:0}.accessory.equipped{border-color:var(--green);box-shadow:inset 0 0 0 1px #9fd0a733}.accessory .itemicon{font-size:26px;display:block;margin-bottom:4px}.accessory strong{font-size:13px;display:block}.accessory small{font-size:11px;color:var(--muted);display:block;margin-top:3px}.lock{color:var(--gold)}.charstage{display:flex;align-items:center;gap:16px;background:linear-gradient(130deg,#282f45,#182033);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}.stageavatar{width:92px;height:104px;display:grid;place-items:center;position:relative;flex-shrink:0;border-radius:14px;background:radial-gradient(circle at 50% 25%,#5a6382,#252d41 75%);font-size:56px}.stageaccessory{position:absolute;top:2px;right:1px;font-size:26px;filter:drop-shadow(0 2px 2px #000)}.stageinfo{min-width:0}.stageinfo h4{margin:0 0 4px;font-size:18px}.mini-bar{height:7px;background:#111725;border-radius:20px;overflow:hidden;margin-top:8px}.mini-bar span{display:block;height:100%;background:linear-gradient(90deg,#b38a3f,#f0d487)}
+/* Questweaver visual polish: enchanted dusk, illustrated landscape, gentle motion */
+:root{--bg:#0c1020;--panel:#171e31;--panel2:#202a40;--line:#3c4964;--ink:#fbf2df;--muted:#bac4d7;--gold:#f0cc79;--green:#a8dfba;--radius:20px}
+body{background:radial-gradient(ellipse at 50% -10%,#394569 0,#171e32 34%,#0c1020 76%);background-attachment:fixed;letter-spacing:.005em}
+.app{max-width:1080px;padding-top:20px}
+.brand .sigil{background:linear-gradient(145deg,#ffe6a0,#c59a4d);box-shadow:0 0 28px #e0bd6933,inset 0 1px #fff8;border:1px solid #f8dda0}
+.brand h1{text-shadow:0 2px 22px #e0bd6922}
+.hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(110deg,#202b48ee 0%,#252d46dc 46%,#18243aeF 100%);border-color:#65708b;box-shadow:0 22px 55px #0005,inset 0 1px #ffffff16;padding:22px}
+.hero:before{content:"";position:absolute;z-index:-1;inset:0;opacity:.92;background:radial-gradient(ellipse at 78% 12%,#f6d99a55 0 2px,transparent 3px),radial-gradient(ellipse at 86% 22%,#f6d99a88 0 1px,transparent 2px),radial-gradient(ellipse at 67% 18%,#fff8 0 1px,transparent 2px),radial-gradient(ellipse at 93% 12%,#fff8 0 1px,transparent 2px),linear-gradient(160deg,transparent 0 48%,#141d32 48.2% 100%),linear-gradient(148deg,transparent 0 44%,#354364 44.2% 57%,transparent 57.2%),linear-gradient(28deg,transparent 0 55%,#485777 55.2% 67%,transparent 67.2%),radial-gradient(ellipse at 80% 100%,#b68c4a55,transparent 42%)}
+.hero:after{content:"✦   ·   ✧";position:absolute;right:22px;top:16px;color:#ffe5a5;font-size:19px;letter-spacing:16px;opacity:.7;pointer-events:none;animation:starlight 5s ease-in-out infinite}
+@keyframes starlight{0%,100%{opacity:.35;transform:translateY(0)}50%{opacity:.95;transform:translateY(-4px)}}
+.hero-row,.xphead,.bar,.hero>.sub{position:relative;z-index:1}
+.avatar{background:linear-gradient(145deg,#6d789b,#303b59);border:1px solid #a7b3d0;box-shadow:0 0 0 4px #ffffff09,0 8px 22px #0004}
+.goldbox{filter:drop-shadow(0 0 14px #f0cc7925)}
+.bar{height:10px;border:1px solid #ffffff12;background:#0a1020aa}.bar span{background:linear-gradient(90deg,#bb873c,#f7d77f,#fff0b4);box-shadow:0 0 14px #f0cc7966}
+.tabs{padding:5px;border:1px solid #ffffff0b;border-radius:17px;background:#0b1020aa;backdrop-filter:blur(12px);scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{border-radius:12px;border-color:transparent;background:transparent;transition:background .2s,border-color .2s,transform .2s}.tab:hover{transform:translateY(-1px)}.tab.active{background:linear-gradient(135deg,#4b5271,#303a56);border-color:#9c8b61;box-shadow:inset 0 1px #ffffff1c,0 4px 14px #0002}
+.panel{background:linear-gradient(145deg,#1b2438f5,#141b2bf5);border-color:#3c4964;box-shadow:0 12px 35px #0002,inset 0 1px #ffffff08;backdrop-filter:blur(8px)}
+.quest,.charcard,.accessory{background:linear-gradient(145deg,#263149,#1b2438);border-color:#3b4964;box-shadow:inset 0 1px #ffffff08;transition:transform .2s,border-color .2s,box-shadow .2s}.quest:hover,.charcard:hover,.accessory:hover{transform:translateY(-2px);border-color:#8a8a86;box-shadow:0 8px 22px #0002,inset 0 1px #ffffff0b}.quest.done{filter:saturate(.7)}
+button{transition:transform .16s ease,filter .16s ease,box-shadow .16s ease}button:active{transform:scale(.98)}button.primary{background:linear-gradient(135deg,#ffe6a0,#dfb85f);border-color:#ffe6a0;box-shadow:0 4px 18px #d5a94a20}button.primary:hover{box-shadow:0 5px 24px #e0bd6940}
+.field input,.field select,.field textarea{background:#0f1627;border-color:#3c4964}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px #f0cc7919}
+.charart{overflow:hidden;background:radial-gradient(circle at 50% 15%,#8e9ab5 0,#4c5a7c 35%,#252f4a 72%);box-shadow:inset 0 1px #ffffff25}.charstage{position:relative;overflow:hidden;background:radial-gradient(ellipse at 88% 0%,#8b7aaf33,transparent 44%),linear-gradient(130deg,#2d3b5b,#172238);border-color:#526181;box-shadow:inset 0 1px #ffffff12}.stageavatar{background:radial-gradient(circle at 50% 22%,#9ba8c6,#475474 45%,#202b42 80%);box-shadow:inset 0 1px #ffffff30,0 7px 18px #0002}
+.eyebrow{letter-spacing:.16em;text-shadow:0 0 15px #f0cc7920}.toast{box-shadow:0 10px 35px #0006,0 0 24px #e0bd6922}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:420px){.chargrid{gap:7px}.charcard{padding:9px}.charart{height:70px}.charstage{padding:12px;gap:12px}.stageavatar{width:76px;height:90px;font-size:48px}}
+@media(max-width:720px){.app{padding:16px 12px 40px}.layout{grid-template-columns:1fr}.hero{padding:16px}.panel{padding:15px}.top{align-items:flex-start}.save{font-size:10px}.goldbox{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="sigil">⚔</div><div><h1>QUESTWEAVER</h1><p>YOUR LIFE. YOUR CAMPAIGN.</p></div></div>
+  <div class="save" id="saveStatus">● Saved on this device</div>
+</header>
+<section class="hero">
+ <div class="hero-row">
+  <div class="avatar" id="avatar">🧭</div>
+  <div class="grow"><h2 id="heroNameDisplay">Wayfinder</h2><div class="sub"><span id="classDisplay">Ranger</span> · Level <span id="levelDisplay">1</span></div></div>
+  <div class="goldbox"><span id="goldDisplay">25</span><small id="currencyDisplay">GOLD</small></div>
+ </div>
+ <div class="xphead"><span>Experience</span><strong><span id="xpInLevel">0</span> / <span id="xpNeeded">100</span> XP</strong></div>
+ <div class="bar"><span id="xpBar"></span></div>
+ <div class="sub" style="margin-top:7px"><span id="totalXp">0</span> total XP · <span id="toLevel">100</span> XP to next level</div>
+</section>
+<nav class="tabs" aria-label="App sections">
+ <button class="tab active" data-tab="start">✨ Start Portal</button>
+ <button class="tab" data-tab="quests">📜 Quest Log</button>
+ <button class="tab" data-tab="story">🗺️ Chronicle</button>
+ <button class="tab" data-tab="shop">🪙 Reward Shop</button>
+ <button class="tab" data-tab="character">🛡 Character</button>
+ <button class="tab" data-tab="settings">⚙ Rules</button>
+</nav>
+<main>
+<section id="view-start">
+ <div class="layout">
+  <div class="panel">
+   <div class="eyebrow">The threshold · Courage over perfection</div>
+   <h3>What are you avoiding?</h3>
+   <p class="muted">You already know what to do. You don't have to feel ready, and you don't have to finish. Pick one tiny action and try it for two minutes.</p>
+   <form id="startForm">
+    <div class="field"><label for="startTask">Quest you're avoiding</label><input id="startTask" maxlength="120" placeholder="e.g. Reply to that email" required></div>
+    <div class="field"><label for="startStep">The smallest visible first step</label><textarea id="startStep" maxlength="240" rows="2" placeholder="e.g. Open the email and read it once" required></textarea></div>
+    <div class="field"><label for="startSize">Make the start feel doable</label><select id="startSize"><option value="2">Tiny — 2 minutes</option><option value="5">Small — 5 minutes</option><option value="10">Steady — 10 minutes</option></select></div>
+    <button class="primary full" type="submit">⚔ Accept the Courage Check</button>
+   </form>
+   <div id="activeStart" class="quest hidden" style="margin-top:16px">
+    <div class="eyebrow">Your only mission</div><h3 id="activeTask" style="margin-top:7px"></h3><p id="activeStep"></p>
+    <div class="muted" id="activeDuration"></div>
+    <div class="qactions"><button class="primary" id="timerButton">▶ Start 2-minute timer</button><button id="startedButton">I took the first step · +10 XP</button><button class="ghost" id="shrinkButton">Make it easier</button></div>
+    <div id="timerStatus" class="muted" style="margin-top:10px" aria-live="polite">No pressure to finish. Stopping after the timer is allowed.</div>
+   </div>
+  </div>
+  <div class="panel">
+   <div class="eyebrow">Your new victory condition</div><h3>Starting counts</h3>
+   <p>Questweaver rewards the moment you cross the threshold—not just the finished task.</p>
+   <div class="statrow"><span>Courage starts</span><strong id="startCount">0</strong></div>
+   <div class="statrow"><span>Courage XP earned</span><strong id="startXp">0</strong></div>
+   <div class="statrow"><span>Gold earned from starts</span><strong id="startGold">0</strong></div>
+   <div style="border-top:1px solid var(--line);margin:16px 0"></div>
+   <div class="eyebrow">A gentle rule</div><h3>No shame, no streak penalties</h3><p class="muted">You can stop after two minutes. You can shrink the task. You can return later. Questweaver won't take away XP for being human.</p>
+   <button class="ghost full" id="goQuestLog">Open my Quest Log</button>
+  </div>
+ </div>
+</section>
+<section id="view-quests" class="hidden">
+ <div class="layout">
+  <div class="panel">
+   <div class="panelhead"><div><div class="eyebrow">The adventure begins</div><h3>Your Quest Log</h3><div class="muted">Small steps count. Every quest moves you forward.</div></div><button class="ghost" id="resetCompleted" title="Remove completed quests">Clear done</button></div>
+   <div id="questList"></div>
+  </div>
+  <div class="panel">
+   <div class="eyebrow">Add to your campaign</div><h3>Write a quest</h3>
+   <form id="questForm">
+    <div class="field"><label for="questName">Quest name</label><input id="questName" maxlength="100" placeholder="e.g. Conquer the inbox" required></div>
+    <div class="smallgrid">
+     <div class="field"><label for="questType">Quest type</label><select id="questType"><option>Side quest</option><option>Main quest</option><option>Daily quest</option><option>Boss battle</option></select></div>
+     <div class="field"><label for="questDifficulty">Difficulty</label><select id="questDifficulty"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="epic">Epic</option></select></div>
+    </div>
+    <div class="field"><label for="questRepeat">Schedule</label><select id="questRepeat"><option value="once">One-time quest</option><option value="daily">Daily task · every day</option><option value="weekly">Weekly task · choose days</option></select></div>
+    <div class="field hidden" id="weeklyDaysField"><label>Which days should this task appear? Choose 1–7 days.</label><div id="weeklyDays" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px"><label><input type="checkbox" name="weeklyDay" value="1" checked> Mon</label><label><input type="checkbox" name="weeklyDay" value="2" checked> Tue</label><label><input type="checkbox" name="weeklyDay" value="3" checked> Wed</label><label><input type="checkbox" name="weeklyDay" value="4" checked> Thu</label><label><input type="checkbox" name="weeklyDay" value="5" checked> Fri</label><label><input type="checkbox" name="weeklyDay" value="6"> Sat</label><label><input type="checkbox" name="weeklyDay" value="0"> Sun</label></div></div>
+    <div class="smallgrid">
+     <div class="field"><label for="questXp">XP reward</label><input id="questXp" type="number" min="0" max="10000" value="20" required></div>
+     <div class="field"><label for="questGold">Gold reward</label><input id="questGold" type="number" min="0" max="10000" value="10" required></div>
+    </div>
+    <button class="primary full" type="submit">＋ Add quest</button>
+   </form>
+   <div style="border-top:1px solid var(--line);margin:18px 0"></div>
+   <div class="eyebrow">Campaign stats</div>
+   <div class="statrow"><span>Quests completed</span><strong id="completedCount">0</strong></div>
+   <div class="statrow"><span>Quests in log</span><strong id="questCount">0</strong></div>
+   <div class="statrow"><span>Gold earned (lifetime)</span><strong id="earnedGold">0</strong></div>
+  </div>
+ </div>
+</section>
+<section id="view-story" class="hidden">
+ <div class="layout">
+  <div class="panel">
+   <div class="eyebrow">The Atlas of Unwritten Roads · Act I</div>
+   <h3 id="storyTitle">Chapter 1: The Map That Remembered</h3>
+   <p class="muted" id="storyProgress">A story that grows at your pace. Choices are saved; nothing expires.</p>
+   <div class="charstage" style="min-height:130px"><div class="stageavatar">🗺️</div><div class="stageinfo"><div class="eyebrow">A strange discovery</div><h4 id="storySceneTitle">A road appears where none should be</h4><p id="storyText">Rain taps the windows of the old waystation. Beneath a loose floorboard, you find a map that redraws itself when you touch it. A silver road glows toward the Whispering Wood.</p></div></div>
+   <div id="storyChoices"></div><div id="storyOutcome" class="quest hidden"></div>
+   <div class="qactions"><button id="storyContinue" class="primary hidden">Continue the chapter →</button><button id="storyReset" class="ghost">Restart story (keeps XP)</button></div>
+  </div>
+  <div class="panel"><div class="eyebrow">Your Chronicle Journal</div><h3>What the world remembers</h3><div class="statrow"><span>Companion</span><strong id="companionName">None yet</strong></div><div class="statrow"><span>Choices recorded</span><strong id="choiceCount">0</strong></div><div class="statrow"><span>Side quests found</span><strong id="storySideCount">0</strong></div><div id="journalEntries" style="margin-top:12px"></div><div class="quest"><div class="eyebrow">Optional side quest</div><strong>Lost in the Margins</strong><p class="muted">When available, help a wayward messenger recover a missing page. Side quests add lore and small rewards, never block the main story.</p><button id="sideQuestButton" class="full">Discover side quest</button></div></div>
+ </div>
+</section>
+<section id="view-shop" class="hidden">
+ <div class="layout">
+  <div class="panel"><div class="eyebrow">Spend with purpose</div><h3>Your Reward Shop</h3><p class="muted">Trade your earned gold for rewards you choose in real life.</p><div id="shopList"></div></div>
+  <div class="panel"><div class="eyebrow">Make it yours</div><h3>Create a reward</h3>
+   <form id="rewardForm"><div class="field"><label for="rewardName">Reward</label><input id="rewardName" maxlength="100" placeholder="e.g. Guilt-free gaming time" required></div><div class="field"><label for="rewardDesc">Description (optional)</label><input id="rewardDesc" maxlength="160" placeholder="A little treat for your hard work"></div><div class="field"><label for="rewardCost">Price in gold</label><input id="rewardCost" type="number" min="1" max="100000" value="20" required></div><button class="primary full" type="submit">＋ Add to shop</button></form>
+  </div>
+ </div>
+</section>
+<section id="view-character" class="hidden">
+ <div class="layout">
+  <div class="panel"><div class="eyebrow">Choose your adventurer</div><h3>Your character, your story</h3><p class="muted">The Wanderer is your starting hero. Other heroes require a lifetime XP milestone to recruit. Each hero has their own accessory collection, earned by adventuring as them.</p>
+   <div class="chargrid" id="characterChoices"></div>
+   <div class="field"><label for="heroName">Character name</label><input id="heroName" maxlength="40" value="Wayfinder" placeholder="Name your adventurer"></div>
+   <button class="primary full" id="saveCharacter">Save character name</button>
+   <div class="charstage"><div class="stageavatar"><span id="stageAvatar">🧭</span><span class="stageaccessory" id="stageAccessory"></span></div><div class="stageinfo"><div class="eyebrow">Current adventurer</div><h4 id="stageName">Wayfinder</h4><div class="muted" id="stageClass">The Wanderer · Curious, focused, brave</div><div class="mini-bar"><span id="stageXpBar" style="width:0%"></span></div><div class="muted" style="margin-top:5px"><span id="stageXp">0</span> XP · <span id="accessoryCount">1</span> accessory unlocked</div></div></div>
+  </div>
+  <div class="panel"><div class="eyebrow">Earn XP. Express yourself.</div><h3>Accessory collection</h3><p class="muted">Accessories unlock separately for each hero as you earn XP while adventuring as them. Switch heroes to begin a fresh cosmetic collection.</p>
+   <div class="statrow"><span>Current level</span><strong id="charLevel">1</strong></div><div class="statrow"><span>Total experience</span><strong id="charXp">0 XP</strong></div><div class="statrow"><span>Current gold</span><strong id="charGold">25</strong></div><div class="statrow"><span>Rewards redeemed</span><strong id="redeemedCount">0</strong></div>
+   <div class="accessorygrid" id="accessoryCollection"></div><p class="muted" style="margin-top:14px">Cosmetics are for fun, not power. No XP is lost when you switch characters or accessories.</p>
+  </div>
+ </div>
+</section>
+<section id="view-settings" class="hidden">
+ <div class="layout">
+  <div class="panel"><div class="eyebrow">Make the rules</div><h3>Campaign Settings</h3>
+   <div class="field"><label for="currencyName">Currency name</label><input id="currencyName" maxlength="20" value="Gold"></div>
+   <div class="field"><label for="xpPerLevel">XP required per level</label><input id="xpPerLevel" type="number" min="10" max="100000" step="10" value="100"></div>
+   <div class="field"><label for="theme">World theme</label><select id="theme"><option value="classic">Enchanted parchment</option><option value="dark">Dark fantasy</option><option value="cozy">Cozy woodland</option><option value="arcane">Arcane academy</option><option value="scifi">Sci-fi campaign</option></select></div>
+   <button class="primary full" id="saveSettings">Save campaign rules</button>
+  </div>
+  <div class="panel"><div class="eyebrow">Your data, your choice</div><h3>Backup & reset</h3><p class="muted">Export a backup so you can keep a copy of your quests, settings, XP, and gold.</p><button class="full" id="exportData">↓ Export backup (JSON)</button><div style="height:9px"></div><label class="muted" for="importFile">Restore from a Questweaver backup</label><input style="display:block;width:100%;margin:8px 0 14px" id="importFile" type="file" accept="application/json,.json"><button class="full" id="importData">↑ Restore backup</button><div style="border-top:1px solid var(--line);margin:18px 0"></div><p class="muted">Reset permanently deletes this app's saved data from this browser.</p><button class="full" id="resetAll" style="border-color:#9e5c5c;color:#f0b0a9">Reset all data</button>
+  </div>
+ </div>
+</section>
+</main>
+<div class="footer">QUESTWEAVER · Personal prototype · Progress saves in this browser</div>
+</div>
+<div id="toast" class="toast hidden" role="status"></div>
+<script>
+const KEY="questweaver.personal.v1";
+const defaults=()=>({hero:{name:"Wayfinder",className:"The Wanderer",avatar:"🧭",characterId:"wanderer",equippedAccessory:"none"},characterProgress:{wanderer:0,guardian:0,seeker:0,rogue:0},unlockedCharacters:["wanderer"],xp:0,gold:25,goldEarned:0,currency:"Gold",xpPerLevel:100,theme:"classic",quests:[
+{id:1,name:"Slay the Laundry Beast",type:"Side quest",difficulty:"medium",xp:25,gold:10,done:false},
+{id:2,name:"Study the Ancient Scrolls",type:"Main quest",difficulty:"hard",xp:50,gold:20,done:false},
+{id:3,name:"Restore the Adventurer's Energy",type:"Daily quest",difficulty:"easy",xp:15,gold:5,done:false}],
+rewards:[{id:1,name:"A cozy break",desc:"Enjoy 15 minutes of guilt-free relaxation.",cost:15},{id:2,name:"A new chapter",desc:"Make time for a book or favorite hobby.",cost:30}],
+redeemed:[],startStats:{count:0,xp:0,gold:0},story:{chapter:1,scene:0,choices:[],flags:{},companion:null,sideFound:false,sideDone:false,journal:[]}});
+let state;
+try{state=JSON.parse(localStorage.getItem(KEY))||defaults()}catch(e){state=defaults()}
+state.hero={...defaults().hero,...(state.hero||{})};state.characterProgress=state.characterProgress||{wanderer:state.xp||0,guardian:0,seeker:0,rogue:0};state.unlockedCharacters=state.unlockedCharacters||["wanderer"];if(!state.hero.characterId){state.hero.characterId=({Ranger:"wanderer",Wizard:"seeker",Paladin:"guardian",Rogue:"rogue"}[state.hero.className]||"wanderer")}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));document.getElementById("saveStatus").textContent="● Saved on this device"}catch(e){document.getElementById("saveStatus").textContent="! Save unavailable"}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function level(){return Math.floor(state.xp/Math.max(10,state.xpPerLevel))+1}
+const characters=[
+ {id:"wanderer",name:"The Wanderer",role:"Curious · Focused · Brave",avatar:"🧭",cost:0},
+ {id:"guardian",name:"The Guardian",role:"Steady · Strong · Loyal",avatar:"🛡️",cost:250},
+ {id:"seeker",name:"The Seeker",role:"Wise · Creative · Calm",avatar:"🧙‍♀️",cost:600},
+ {id:"rogue",name:"The Rogue",role:"Quick · Clever · Adaptable",avatar:"🗡️",cost:1000}
+];
+const accessories=[
+ {id:"none",name:"Everyday adventurer",icon:"✨",xp:0,desc:"Your journey starts here."},
+ {id:"hood",name:"Explorer's Hood",icon:"🧥",xp:25,desc:"A practical travel layer."},
+ {id:"pendant",name:"Moon Pendant",icon:"📿",xp:75,desc:"A little magic for the road."},
+ {id:"hat",name:"Feathered Hat",icon:"🎩",xp:125,desc:"A flair for every quest."},
+ {id:"cloak",name:"Trailblazer Cloak",icon:"🧣",xp:200,desc:"Earned by showing up again."},
+ {id:"staff",name:"Crystal Focus",icon:"🔮",xp:300,desc:"For your growing power."},
+ {id:"companion",name:"Wolf Companion",icon:"🐺",xp:450,desc:"A loyal friend for the journey."},
+ {id:"crown",name:"Crown of Courage",icon:"👑",xp:650,desc:"A celebration of persistence."}
+];
+function ensureCharacterProgress(){
+ state.characterProgress=state.characterProgress||{wanderer:state.xp||0,guardian:0,seeker:0,rogue:0};
+ state.unlockedCharacters=state.unlockedCharacters||["wanderer"];
+ if(!state.unlockedCharacters.includes("wanderer"))state.unlockedCharacters.unshift("wanderer");
+}
+function grantCharacterXp(amount){ensureCharacterProgress();const id=state.hero.characterId||"wanderer";state.characterProgress[id]=(state.characterProgress[id]||0)+Number(amount||0)}
+function unlockCharacters(){ensureCharacterProgress();characters.forEach(c=>{if(state.xp>=c.cost&&!state.unlockedCharacters.includes(c.id)){state.unlockedCharacters.push(c.id);toast(`${c.name} recruited! Visit Character to switch heroes.`)}})}
+function renderCharacters(){
+ ensureCharacterProgress();
+ const choices=document.getElementById("characterChoices"),selected=state.hero.characterId||"wanderer";
+ choices.innerHTML=characters.map(c=>{const unlocked=state.unlockedCharacters.includes(c.id);return `<button type="button" class="charcard ${selected===c.id?"selected":""}" data-character="${c.id}" aria-pressed="${selected===c.id}" ${unlocked?"":"disabled"}><span class="charart">${unlocked?c.avatar:"🔒"}</span><strong>${c.name}</strong><small>${unlocked?c.role:`Recruit at ${c.cost.toLocaleString()} total XP`}</small></button>`}).join("");
+ choices.querySelectorAll("[data-character]:not(:disabled)").forEach(b=>b.addEventListener("click",()=>{const c=characters.find(x=>x.id===b.dataset.character);state.hero.characterId=c.id;state.hero.className=c.name;state.hero.avatar=c.avatar;state.hero.equippedAccessory="none";save();render();toast(`${c.name} is now your adventurer. Their accessory journey starts fresh!`)}));
+ const charXp=state.characterProgress[selected]||0;
+ const unlocked=accessories.filter(a=>charXp>=a.xp);let equipped=state.hero.equippedAccessory||"none";if(!unlocked.some(a=>a.id===equipped)){equipped="none";state.hero.equippedAccessory="none"}
+ const active=accessories.find(a=>a.id===equipped)||accessories[0],c=characters.find(x=>x.id===(state.hero.characterId||"wanderer"))||characters[0];
+ document.getElementById("stageAvatar").textContent=c.avatar;document.getElementById("stageAccessory").textContent=active.id==="none"?"":active.icon;document.getElementById("stageName").textContent=state.hero.name||"Wayfinder";document.getElementById("stageClass").textContent=`${c.name} · ${c.role}`;document.getElementById("stageXp").textContent=charXp;document.getElementById("accessoryCount").textContent=unlocked.length;document.getElementById("stageXpBar").style.width=Math.min(100,(charXp/Math.max(1,accessories[accessories.length-1].xp))*100)+"%";
+ const coll=document.getElementById("accessoryCollection");coll.innerHTML=accessories.map(a=>{const ok=charXp>=a.xp,isOn=equipped===a.id;return `<button type="button" class="accessory ${isOn?"equipped":""}" data-accessory="${a.id}" ${ok?"":"disabled"}><span class="itemicon">${ok?a.icon:"🔒"}</span><strong>${a.name}</strong><small>${ok?(isOn?"✓ Equipped · ":"")+a.desc:`Unlock at ${a.xp} ${a.xp===1?"XP":"hero XP"}`}</small></button>`}).join("");
+ coll.querySelectorAll("[data-accessory]:not(:disabled)").forEach(b=>b.addEventListener("click",()=>{state.hero.equippedAccessory=b.dataset.accessory;save();render();const a=accessories.find(x=>x.id===b.dataset.accessory);toast(a.id==="none"?"Accessory removed.":`${a.name} equipped!`)}));
+}
+function toast(s){const el=document.getElementById("toast");el.textContent=s;el.classList.remove("hidden");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.add("hidden"),2400)}
+function render(){
+ const per=Math.max(10,Number(state.xpPerLevel)||100),into=state.xp%per;
+ document.getElementById("heroNameDisplay").textContent=state.hero.name||"Adventurer";
+ document.getElementById("classDisplay").textContent=state.hero.className;
+ document.getElementById("avatar").textContent=state.hero.avatar||"🧭";
+ document.getElementById("levelDisplay").textContent=level();
+ document.getElementById("goldDisplay").textContent=state.gold;
+ document.getElementById("currencyDisplay").textContent=state.currency.toUpperCase();
+ document.getElementById("xpInLevel").textContent=into;document.getElementById("xpNeeded").textContent=per;
+ document.getElementById("xpBar").style.width=(into/per*100)+"%";
+ document.getElementById("totalXp").textContent=state.xp;document.getElementById("toLevel").textContent=per-into;
+ document.getElementById("completedCount").textContent=state.quests.filter(q=>typeof questIsDone==="function"?questIsDone(q):q.done).length;
+ document.getElementById("questCount").textContent=state.quests.length;
+ document.getElementById("earnedGold").textContent=state.goldEarned;
+ const ss=state.startStats||{count:0,xp:0,gold:0};document.getElementById("startCount").textContent=ss.count;document.getElementById("startXp").textContent=ss.xp;document.getElementById("startGold").textContent=ss.gold;
+ document.getElementById("charLevel").textContent=level();document.getElementById("charXp").textContent=state.xp+" XP";
+ document.getElementById("charGold").textContent=state.gold;document.getElementById("redeemedCount").textContent=state.redeemed.length;
+ document.getElementById("currencyName").value=state.currency;document.getElementById("xpPerLevel").value=state.xpPerLevel;document.getElementById("theme").value=state.theme;
+ document.getElementById("heroName").value=state.hero.name;
+ renderQuests();renderShop();renderCharacters();document.body.dataset.theme=state.theme;
+}
+function localDateKey(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function questIsDone(q){if(q.repeat==="daily")return q.lastCompletedDate===localDateKey();if(q.repeat==="weekly")return q.lastCompletedDate===localDateKey();return !!q.done}
+function questIsDue(q){if(q.repeat==="weekly")return (q.daysOfWeek||[1,2,3,4,5]).includes(new Date().getDay());return true}
+function scheduleLabel(q){if(q.repeat==="daily")return "Daily · resets tomorrow";if(q.repeat==="weekly"){const names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];return "Weekly · "+(q.daysOfWeek||[]).slice().sort((a,b)=>a-b).map(d=>names[d]).join(", ")}return "One-time"}
+function renderQuests(){
+ const list=document.getElementById("questList");
+ if(!state.quests.length){list.innerHTML='<div class="empty">Your quest log is empty.<br>Add a quest to begin your adventure.</div>';return}
+ const ordered=[...state.quests].sort((a,b)=>Number(questIsDone(a))-Number(questIsDone(b)));
+ list.innerHTML=ordered.map(q=>{const done=questIsDone(q),due=questIsDue(q);return `<article class="quest ${done?"done":""}"><div class="qrow"><div class="qicon">${q.type==="Boss battle"?"🐉":q.type==="Main quest"?"📜":q.repeat==="daily"?"☀️":q.repeat==="weekly"?"🗓️":q.type==="Side quest"?"🧭":"📜"}</div><div class="grow"><div class="qtitle">${esc(q.name)} ${done?"✓":""}</div><div class="qmeta">${esc(q.type)} · ${esc(q.difficulty[0].toUpperCase()+q.difficulty.slice(1))} · ${esc(scheduleLabel(q))}</div><div class="rewards">＋${q.xp} XP · ＋${q.gold} ${esc(state.currency)}</div></div></div><div class="qactions"><button class="primary" data-complete="${q.id}" ${done||!due?"disabled":""}>${done?(q.repeat==="once"?"✓ Completed":"✓ Done today"):!due?"Not scheduled today":"Complete quest"}</button><button class="ghost" data-delete="${q.id}">Remove</button></div></article>`}).join("");
+ list.querySelectorAll("[data-complete]").forEach(b=>b.addEventListener("click",()=>completeQuest(Number(b.dataset.complete))));
+ list.querySelectorAll("[data-delete]").forEach(b=>b.addEventListener("click",()=>{state.quests=state.quests.filter(q=>q.id!==Number(b.dataset.delete));save();render();toast("Quest removed from your log.")}));
+}
+function completeQuest(id){const q=state.quests.find(x=>x.id===id);if(!q||questIsDone(q)||!questIsDue(q))return;const old=level();if(q.repeat==="daily"||q.repeat==="weekly")q.lastCompletedDate=localDateKey();else q.done=true;state.xp+=Number(q.xp);grantCharacterXp(q.xp);state.gold+=Number(q.gold);state.goldEarned+=Number(q.gold);unlockCharacters();save();render();toast(level()>old?`Level up! You reached level ${level()}!`:`Quest complete! +${q.xp} XP and +${q.gold} ${state.currency}.`)}
+function renderShop(){const el=document.getElementById("shopList");if(!state.rewards.length){el.innerHTML='<div class="empty">No rewards yet. Create one to stock your shop.</div>';return}el.innerHTML=state.rewards.map(r=>`<div class="shopitem"><div class="grow"><h4>${esc(r.name)}</h4><p>${esc(r.desc||"A reward you chose for yourself.")}</p></div><div style="text-align:right"><div class="price">${r.cost} ${esc(state.currency)}</div><button style="margin-top:8px" data-buy="${r.id}" ${state.gold<r.cost?"disabled":""}>Redeem</button></div></div>`).join("");el.querySelectorAll("[data-buy]").forEach(b=>b.addEventListener("click",()=>{const r=state.rewards.find(x=>x.id===Number(b.dataset.buy));if(!r||state.gold<r.cost)return;state.gold-=r.cost;state.redeemed.push({name:r.name,cost:r.cost,at:new Date().toISOString()});save();render();toast(`Reward redeemed: ${r.name}. Enjoy it!`)}))}
+document.getElementById("questRepeat").addEventListener("change",e=>document.getElementById("weeklyDaysField").classList.toggle("hidden",e.target.value!=="weekly"));
+document.getElementById("questForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("questName").value.trim();const xp=Number(document.getElementById("questXp").value),gold=Number(document.getElementById("questGold").value),repeat=document.getElementById("questRepeat").value;const days=[...document.querySelectorAll('input[name="weeklyDay"]:checked')].map(x=>Number(x.value));if(!name||xp<0||gold<0)return;if(repeat==="weekly"&&days.length===0){toast("Choose at least one day for your weekly task.");return}state.quests.unshift({id:Date.now(),name,type:document.getElementById("questType").value,difficulty:document.getElementById("questDifficulty").value,xp,gold,done:false,repeat,daysOfWeek:repeat==="weekly"?days:[]});save();render();e.target.reset();document.getElementById("questXp").value=20;document.getElementById("questGold").value=10;document.getElementById("weeklyDaysField").classList.add("hidden");document.querySelectorAll('input[name="weeklyDay"]').forEach(x=>x.checked=[1,2,3,4,5].includes(Number(x.value)));toast(repeat==="daily"?"Daily task added! It resets each day.":repeat==="weekly"?"Weekly task added with your selected days.":"Quest added to your campaign.")});
+document.getElementById("rewardForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("rewardName").value.trim(),cost=Number(document.getElementById("rewardCost").value);if(!name||cost<1)return;state.rewards.push({id:Date.now(),name,desc:document.getElementById("rewardDesc").value.trim(),cost});save();render();e.target.reset();document.getElementById("rewardCost").value=20;toast("Your new reward is in the shop.")});
+function showTab(tab){document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active",x.dataset.tab===tab));["start","quests","story","shop","character","settings"].forEach(v=>document.getElementById("view-"+v).classList.toggle("hidden",v!==tab));if(tab==="story")renderStory();}
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+const storyData=[
+ {title:"Chapter 1: The Map That Remembered",scenes:[
+  {title:"A road appears where none should be",text:"Rain taps the windows of the old waystation. Beneath a loose floorboard, you find a map that redraws itself when you touch it. A silver road glows toward the Whispering Wood.",choices:[{label:"Follow the silver road now",desc:"Trust curiosity and step into the unknown.",flag:"bold",out:"The map warms in your hands. The road brightens as if pleased you chose to begin.",xp:15},{label:"Study the map carefully first",desc:"Look for patterns before moving.",flag:"careful",out:"You notice a tiny star marking a safe spring. Preparation becomes its own kind of courage.",xp:15}]},
+  {title:"A voice beneath the roots",text:"At the wood's edge, a small fox-like creature is caught beneath a fallen branch. Behind it, the silver road continues between ancient trees.",choices:[{label:"Free the creature before continuing",desc:"Spend time helping a stranger.",flag:"kind",companion:"Moss",out:"You lift the branch and the creature shakes rain from its moss-green fur. It decides to travel with you. Moss, a fox-spirit, joins your journey.",xp:25},{label:"Mark the spot and seek help nearby",desc:"Make a plan that keeps both of you safe.",flag:"prudent",out:"You find a woodskeeper who helps free the creature. It follows you anyway, curious about your map. Moss joins your journey.",companion:"Moss",xp:20}]},
+  {title:"The bridge of small beginnings",text:"A broken footbridge blocks the way. A simple repair will take a little effort; the map's glowing ink waits patiently. You do not need to solve the whole road today.",choices:[{label:"Repair one plank, then reassess",desc:"A small start is still a start.",flag:"smallsteps",out:"One plank settles into place. The map inks in a new landmark: The Lantern Archive. The road can be crossed, one board at a time.",xp:20},{label:"Ask Moss to scout another route",desc:"Use support instead of forcing it alone.",flag:"teamwork",out:"Moss darts through the ferns and returns with a winding but safe path. The map inks in a new landmark: The Lantern Archive.",xp:20}]}
+ ]},
+ {title:"Chapter 2: The Lantern Archive",scenes:[
+  {title:"A door without a handle",text:"At the Archive, lanterns float above shelves carved into a cliff. The entrance has no handle—only a hollow shaped like a memory. The map whispers: 'What you begin, you can return to.'",choices:[{label:"Offer a memory of trying again",desc:"Remember a time you returned after stopping.",flag:"resilience",out:"The doorway opens with a sound like a held breath released. Inside, a page bears your mark: the Archive welcomes those who return.",xp:25},{label:"Ask Moss to listen for a mechanism",desc:"Let a companion notice what you cannot.",flag:"trust",out:"Moss tilts their ears. A hidden latch clicks, and the door opens. Inside, a page bears your mark: the Archive welcomes those who return.",xp:25}]},
+  {title:"The missing page",text:"A messenger named Tavi rushes in. A page has blown into the lower stacks, where ink-wisps tangle around forgotten words. Tavi offers a brass compass if you help.",choices:[{label:"Help Tavi recover the page",desc:"Take the optional side quest.",flag:"helpedTavi",out:"Together you coax the ink-wisps into a bottle and recover the page. Tavi gives you a brass compass and promises to remember your kindness.",xp:30,gold:15,side:true},{label:"Give Tavi a route and continue",desc:"You can help another time; the main path remains open.",flag:"guidedTavi",out:"You mark a safe route on the map. Tavi heads off with a plan, and the Archive's main chamber opens before you.",xp:20}]},
+  {title:"The Atlas stirs",text:"At the heart of the Archive, the map unfolds into a sky full of roads. One path points toward a sealed city; another vanishes into a storm. A note appears: 'Every road changes the traveler.'",choices:[{label:"Choose the road toward the sealed city",desc:"Seek the oldest unanswered question.",flag:"cityRoad",out:"A new route burns gold across the Atlas: the Sealed City awaits in a future chapter.",xp:35},{label:"Choose the storm road",desc:"Follow the uncertain signal.",flag:"stormRoad",out:"A blue path curls through the storm. Something beyond it has noticed your arrival.",xp:35}]}
+ ]}
+];
+function storyState(){if(!state.story)state.story={chapter:1,scene:0,choices:[],flags:{},companion:null,sideFound:false,sideDone:false,journal:[]};return state.story}
+function renderStory(){const st=storyState(),chapter=storyData[Math.min(st.chapter-1,1)],scene=chapter.scenes[Math.min(st.scene,chapter.scenes.length-1)],complete=st.chapter>2;document.getElementById('storyTitle').textContent=complete?'The Atlas Awakens — To Be Continued':chapter.title;document.getElementById('storyProgress').textContent=complete?'You completed the first two chapters. Your choices are preserved for future chapters.':`Chapter ${st.chapter} · Scene ${st.scene+1} of ${chapter.scenes.length} · No deadlines, no wrong choices.`;document.getElementById('storySceneTitle').textContent=complete?'The next road is unwritten':scene.title;document.getElementById('storyText').textContent=complete?'The Atlas rests open, its new roads waiting for you. Return whenever you want to continue your campaign.':scene.text;const choices=document.getElementById('storyChoices');choices.innerHTML=complete?'<div class="empty">Chapter 2 complete. More of the Atlas can be added as your campaign grows.</div>':scene.choices.map((c,i)=>`<article class="quest"><strong>${esc(c.label)}</strong><p class="muted">${esc(c.desc)}</p><button class="primary full" data-story-choice="${i}">Choose this path</button></article>`).join('');choices.querySelectorAll('[data-story-choice]').forEach(b=>b.addEventListener('click',()=>chooseStory(Number(b.dataset.storyChoice))));document.getElementById('storyOutcome').classList.add('hidden');document.getElementById('storyContinue').classList.add('hidden');document.getElementById('companionName').textContent=st.companion||'None yet';document.getElementById('choiceCount').textContent=st.choices.length;document.getElementById('storySideCount').textContent=(st.sideFound?1:0);document.getElementById('sideQuestButton').disabled=st.sideDone;document.getElementById('sideQuestButton').textContent=st.sideDone?'✓ Side quest complete':st.sideFound?'Complete side quest · +20 XP':'Discover side quest';document.getElementById('journalEntries').innerHTML=st.journal.length?st.journal.slice().reverse().map(j=>`<div class="quest"><strong>${esc(j.title)}</strong><p class="muted">${esc(j.text)}</p></div>`).join(''):'<p class="muted">Your story choices and discoveries will be recorded here.</p>'}
+function chooseStory(i){const st=storyState(),ch=storyData[st.chapter-1],sc=ch.scenes[st.scene],c=sc.choices[i];if(!c)return;st.choices.push({chapter:st.chapter,scene:st.scene,choice:c.label,flag:c.flag});st.flags[c.flag]=true;if(c.companion)st.companion=c.companion;if(c.side)st.sideFound=true;st.journal.push({title:c.label,text:c.out});const xp=c.xp||15;state.xp+=xp;grantCharacterXp(xp);state.gold+=c.gold||5;state.goldEarned+=c.gold||5;st.lastOutcome=c.out;st.scene++;if(st.scene>=ch.scenes.length){if(st.chapter<2){st.chapter++;st.scene=0;st.journal.push({title:ch.title+' complete',text:'A chapter closes, but your decisions remain part of the world.'})}else{st.chapter=3;st.scene=0;st.journal.push({title:'Chapter 2 complete',text:'The first two chapters of the Atlas are complete. The next road awaits.'})}}save();render();renderStory();const out=document.getElementById('storyOutcome');out.textContent=c.out+` (+${xp} XP${c.gold?`, +${c.gold} gold`:''})`;out.classList.remove('hidden');toast(`Choice recorded · +${xp} XP`)}
+document.getElementById('storyContinue').addEventListener('click',renderStory);document.getElementById('sideQuestButton').addEventListener('click',()=>{const st=storyState();if(st.sideDone)return;if(!st.sideFound){st.sideFound=true;st.journal.push({title:'Lost in the Margins discovered',text:'Tavi’s missing-page request is now in your Chronicle. Continue the story to resolve it.'});save();renderStory();toast('Side quest discovered!');return}st.sideDone=true;state.xp+=20;grantCharacterXp(20);state.gold+=10;state.goldEarned+=10;st.journal.push({title:'Lost in the Margins complete',text:'You made time to help someone. Tavi’s brass compass is yours. +20 XP and +10 gold.'});save();render();renderStory();toast('Side quest complete · +20 XP and +10 gold')});document.getElementById('storyReset').addEventListener('click',()=>{if(confirm('Restart the story from Chapter 1? Your XP and gold stay. Story choices and journal entries will reset.')){state.story={chapter:1,scene:0,choices:[],flags:{},companion:null,sideFound:false,sideDone:false,journal:[]};save();renderStory();toast('The Atlas opens to a fresh page.')}});
+
+document.getElementById("goQuestLog").addEventListener("click",()=>showTab("quests"));
+let currentStart=null, timerInterval=null, secondsLeft=120;
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}document.getElementById("timerButton").textContent="▶ Start 2-minute timer"}
+document.getElementById("startForm").addEventListener("submit",e=>{e.preventDefault();stopTimer();const task=document.getElementById("startTask").value.trim(),step=document.getElementById("startStep").value.trim(),mins=Number(document.getElementById("startSize").value);if(!task||!step)return;currentStart={task,step,mins};secondsLeft=mins*60;document.getElementById("activeTask").textContent=task;document.getElementById("activeStep").textContent=step;document.getElementById("activeDuration").textContent=`Your experiment: ${mins} minutes. You may stop when time is up.`;document.getElementById("timerStatus").textContent="Ready when you are. Starting imperfectly still counts.";document.getElementById("timerButton").textContent=`▶ Start ${mins}-minute timer`;document.getElementById("activeStart").classList.remove("hidden");document.getElementById("startedButton").disabled=false;});
+document.getElementById("timerButton").addEventListener("click",()=>{if(timerInterval){stopTimer();document.getElementById("timerStatus").textContent="Timer paused. Resume when you want.";return}if(!currentStart)return;document.getElementById("timerButton").textContent="Ⅱ Pause timer";const tick=()=>{secondsLeft--;document.getElementById("timerStatus").textContent=`You're doing it. ${Math.floor(secondsLeft/60)}:${String(secondsLeft%60).padStart(2,"0")} left — stopping afterward is allowed.`;if(secondsLeft<=0){stopTimer();document.getElementById("timerStatus").textContent="Your tiny experiment is complete. You may stop, or continue if you want.";toast("Two-minute courage check complete. You showed up!")}};document.getElementById("timerStatus").textContent=`Timer running: ${Math.floor(secondsLeft/60)}:${String(secondsLeft%60).padStart(2,"0")}.`;timerInterval=setInterval(tick,1000)});
+document.getElementById("startedButton").addEventListener("click",()=>{if(!currentStart)return;state.startStats=state.startStats||{count:0,xp:0,gold:0};const old=level();state.startStats.count++;state.startStats.xp+=10;state.startStats.gold+=5;state.xp+=10;grantCharacterXp(10);state.gold+=5;state.goldEarned+=5;unlockCharacters();save();render();stopTimer();document.getElementById("startedButton").disabled=true;document.getElementById("timerStatus").textContent="First step recorded. You can stop here with a clear conscience, or keep going by choice.";toast(level()>old?`Courage earned! +10 XP, +5 ${state.currency} and level up!`:`Courage earned! +10 XP and +5 ${state.currency}.`)});
+document.getElementById("shrinkButton").addEventListener("click",()=>{if(!currentStart)return;const step=document.getElementById("startStep");step.value="Do the first 30 seconds only: "+currentStart.step;document.getElementById("activeStart").classList.add("hidden");document.getElementById("timerStatus").textContent="Task made smaller. Accept the Courage Check again when ready.";});
+document.getElementById("saveCharacter").addEventListener("click",()=>{state.hero.name=document.getElementById("heroName").value.trim()||"Adventurer";save();render();toast("Character name saved.")});
+document.getElementById("saveSettings").addEventListener("click",()=>{state.currency=document.getElementById("currencyName").value.trim()||"Gold";state.xpPerLevel=Math.max(10,Number(document.getElementById("xpPerLevel").value)||100);state.theme=document.getElementById("theme").value;save();render();toast("Campaign rules saved.")});
+document.getElementById("resetCompleted").addEventListener("click",()=>{state.quests=state.quests.filter(q=>q.repeat==="daily"||q.repeat==="weekly"||!questIsDone(q));save();render();toast("One-time completed quests cleared. Recurring routines stay in your log.")});
+document.getElementById("exportData").addEventListener("click",()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="questweaver-backup.json";a.click();URL.revokeObjectURL(url);toast("Backup exported.")});
+document.getElementById("importData").addEventListener("click",async()=>{const f=document.getElementById("importFile").files[0];if(!f){toast("Choose a backup file first.");return}try{const x=JSON.parse(await f.text());if(!x.hero||!Array.isArray(x.quests)||!Array.isArray(x.rewards))throw Error("Invalid backup");state={...defaults(),...x};save();render();toast("Backup restored.")}catch(e){toast("That file isn't a valid Questweaver backup.")}});
+document.getElementById("resetAll").addEventListener("click",()=>{if(confirm("Delete all Questweaver data saved in this browser? Export a backup first if you want to keep it.")){state=defaults();save();render();toast("Your campaign has been reset.")}});
+render();
+</script>
+</body>
+</html>
